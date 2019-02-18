@@ -26,4 +26,26 @@ router.post('/register',function(req, res) {
     res.json(200);    
 });
 
+router.post('/update', function(req, res) {
+    var db = req.db;
+    var id = req.body._id;
+    var newValues ={$set: {'phone':req.body.phone , 'address':req.body.address}};
+    console.log(id);
+    console.log(newValues);    
+    if(id){
+        db.collection('user').update(id,newValues,function(err,res){
+            if(err) throw err;            
+        });        
+    }
+    db.get('user').findOne(id).then(user =>{
+        console.log(user);
+        if(user){                    
+            res.send(user);
+        }
+        else{
+            res.json(null);
+        }
+    });    
+});
+
 module.exports = router;
