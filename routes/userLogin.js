@@ -18,7 +18,7 @@ router.post('/login', function(req, res) {
 
 router.post('/register',function(req, res) {
     var db = req.db;
-    var userProfile = req.body;    
+    var userProfile = req.body;
     console.log(userProfile);
     db.collection('user').insert(userProfile,function(err,res){
         if(err) throw err;         
@@ -46,6 +46,19 @@ router.post('/update', function(req, res) {
             res.json(null);
         }
     });    
+});
+
+router.post('/check',function(req,res){
+    var db = req.db;
+    var email = req.body.email;        
+    db.get('user').findOne({email}).then(user =>{  
+        if(user){                          
+            res.send(user);        
+        }
+        else{
+            res.json(null);
+        }
+    });
 });
 
 module.exports = router;
